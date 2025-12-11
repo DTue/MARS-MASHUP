@@ -1,3 +1,11 @@
+/* NOTE: PLEASE REFER THE LATEST MUSIC FILE VERSION(Music_v2.java)
+
+
+
+
+
+
+
 package mars.mips.instructions.customlangs;
     import mars.simulator.*;
     import mars.mips.hardware.*;
@@ -421,5 +429,7 @@ public class Music extends CustomAssembly{
              }));
     }
 } 
+
+ */
 
     
