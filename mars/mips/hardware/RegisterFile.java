@@ -1,6 +1,8 @@
    package mars.mips.hardware;
 
    import java.util.Observer;
+   import java.util.Set;
+   import java.util.HashSet;
 
    import mars.Globals;
    import mars.assembler.SymbolTable;
@@ -69,6 +71,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private static Register programCounter= new Register("pc", 32, Memory.textBaseAddress); 
       private static Register hi= new Register("hi", 33, 0);//this is an internal register with arbitrary number
       private static Register lo= new Register("lo", 34, 0);// this is an internal register with arbitrary number
+      
+      // Track sealed registers (for custom languages like ReMIPS)
+      private static Set<Integer> sealedRegisters = new HashSet<>();
    		 
    
    	/**
@@ -301,6 +306,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          initializeProgramCounter(Globals .getSettings().getStartAtMain());// replaces "programCounter.resetValue()", DPS 3/3/09
          hi.resetValue();
          lo.resetValue();
+         sealedRegisters.clear();  // Clear sealed registers on reset
       }
       
      /**
@@ -335,5 +341,34 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          }
          hi.deleteObserver(observer);
          lo.deleteObserver(observer);
+      }
+      
+      /**
+       * Mark a register as sealed (read-only). Used for custom language features like ReMIPS.
+       * @param reg The register number to seal.
+       */
+      public static void osmkReg(int reg) {
+         if (reg >= 0 && reg < regFile.length && reg != 0) {
+            sealedRegisters.add(reg);
+         }
+      }
+      
+      /**
+       * Release the seal on a register. Used for custom language features like ReMIPS.
+       * @param reg The register number to unseal.
+       */
+      public static void rOsmkRg(int reg) {
+         if (reg >= 0 && reg < regFile.length) {
+            sealedRegisters.remove(reg);
+         }
+      }
+      
+      /**
+       * Check if a register is sealed (read-only). Used for custom language features like ReMIPS.
+       * @param reg The register number to check.
+       * @return true if the register is sealed, false otherwise.
+       */
+      public static boolean isOsmked(int reg) {
+         return reg >= 0 && reg < regFile.length && sealedRegisters.contains(reg);
       }
    }

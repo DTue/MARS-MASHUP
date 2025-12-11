@@ -1,17 +1,13 @@
 package mars.mips.instructions.customlangs;
-
-public class Music {
-
-    package mars.mips.instructions.customlangs;
-import mars.simulator.*;
-import mars.mips.hardware.*;
-import mars.mips.instructions.syscalls.*;
-import mars.*;
-import mars.util.*;
-import java.util.*;
-import java.io.*;
-import mars.mips.instructions.*;
-import java.util.Random;
+    import mars.simulator.*;
+    import mars.mips.hardware.*;
+    import mars.mips.instructions.syscalls.*;
+    import mars.*;
+    import mars.util.*;
+    import java.util.*;
+    import java.io.*;
+    import mars.mips.instructions.*;
+    import java.util.Random;
 
 public class Music extends CustomAssembly{
 
@@ -427,4 +423,3 @@ public class Music extends CustomAssembly{
 } 
 
     
-}
