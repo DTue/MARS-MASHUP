@@ -81,7 +81,7 @@ public class Music_v2 extends CustomAssembly{
             }
         }));
 
-        //mul(multiple) - atk/ attack => worked
+        //mult(multiple) - atk/ attack => worked
         instructionList.add(
             new BasicInstruction("mult $t0, $t1",
              "Multiplication : multiplies $t0 with $t1 and store within HI|LO",
@@ -102,8 +102,8 @@ public class Music_v2 extends CustomAssembly{
 
         //div(division) - decay(dcy) => worked
         instructionList.add(
-            new BasicInstruction("div $t0, $t1",
-            "Division : divides $t0 by $t1 and store within HI|LO",
+            new BasicInstruction("dcy $t0, $t1",
+            "Decay - Division : divides $t0 by $t1 and store within HI|LO",
             BasicInstructionFormat.R_FORMAT,
             "000000 sssss fffff 00000 00000 011010",
             new SimulationCode(){
@@ -284,7 +284,7 @@ public class Music_v2 extends CustomAssembly{
                 new BasicInstruction("csn $t1,$t2,label",
                 "Branch if equal : Branch to statement at label's address if $t1 and $t2 are equal",
             	 BasicInstructionFormat.I_BRANCH_FORMAT,
-                "000100 sssss ttttt iiiiiiiiiiiiiiii",
+                "000100 sssss fffff tttttttttttttttt",
                 new SimulationCode()
                {
                    public void simulate(ProgramStatement statement) throws ProcessingException
@@ -305,7 +305,7 @@ public class Music_v2 extends CustomAssembly{
                 new BasicInstruction("dsn $t1,$t2,label",
                 "Branch if not equal : Branch to statement at label's address if $t1 and $t2 are not equal",
             	 BasicInstructionFormat.I_BRANCH_FORMAT,
-                "000101 sssss ttttt iiiiiiiiiiiiiiii",
+                "000101 sssss fffff tttttttttttttttt",
                 new SimulationCode()
                {
                    public void simulate(ProgramStatement statement) throws ProcessingException
@@ -326,7 +326,7 @@ public class Music_v2 extends CustomAssembly{
      instructionList.add(
             new BasicInstruction("cf $t1, $t2", "swap two register values $t1 and $t2",
             BasicInstructionFormat.R_FORMAT,
-             "000000 11111 00000 00000 00000 001000",
+             "001010 sssss ttttt fffff 00000 000111",
              new SimulationCode()
              {
                 public void simulate(ProgramStatement statement) throws ProcessingException
@@ -464,6 +464,24 @@ public class Music_v2 extends CustomAssembly{
                     }
                 }
             }));
+
+     //sync - release: set value the same for all registers
+        instructionList.add(
+            new BasicInstruction("sync $t3, $t1, $t2", "set St1 and $t2 same as its destination, $t3",
+            BasicInstructionFormat.R_FORMAT,
+             "001010 sssss ttttt fffff 00000 001000",
+             new SimulationCode()
+             {
+                public void simulate(ProgramStatement statement) throws ProcessingException
+                {
+                    int [] operands = statement.getOperands();
+                    int value =  RegisterFile.getValue(operands[0]);
+                    RegisterFile.updateRegister(operands[1], value);
+                    RegisterFile.updateRegister(operands[2], value); 
+                }
+             }));
+
+             
     //CREATIVE_______I-FORMAT
     //CREATIVE_______J-FORMAT
 
